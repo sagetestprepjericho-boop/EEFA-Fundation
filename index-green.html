@@ -56,7 +56,7 @@ nav a:hover{border-color:var(--form)}
 .menu{display:none;background:none;border:0;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--graphite);cursor:pointer;padding:8px}
 
 /* Hero */
-.hero{padding:clamp(28px,4vw,56px) 0 clamp(64px,8vw,112px)}
+.hero{padding:clamp(32px,4.5vw,64px) 0 clamp(56px,7vw,96px)}
 .sheet{position:relative;border:1.5px solid var(--form);background:#fff;padding:clamp(14px,2.2vw,28px) clamp(14px,2.6vw,36px) clamp(14px,2vw,24px) clamp(14px,2.6vw,36px);padding-right:clamp(30px,4vw,56px)}
 .sheet-head{display:grid;grid-template-columns:2fr 2fr 1fr;gap:clamp(12px,2vw,28px);color:var(--form);font-family:var(--display);font-size:clamp(.72rem,.9vw,.86rem);margin-bottom:clamp(10px,1.4vw,16px)}
 .sheet-head div{border-bottom:1px solid var(--form);padding-bottom:4px;display:flex;gap:8px;white-space:nowrap;overflow:hidden}
@@ -75,8 +75,8 @@ nav a:hover{border-color:var(--form)}
 .sheet-foot{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(10px,1.5vw,18px);font-family:var(--display);font-size:clamp(.72rem,.9vw,.85rem);color:var(--form)}
 .sheet-foot button{background:none;border:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 
-.hero-copy{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,5vw,72px);align-items:end;margin-top:clamp(36px,5vw,64px)}
-h1{font-size:clamp(2.8rem,6.4vw,6rem);font-weight:800;font-stretch:84%;line-height:.9;letter-spacing:-.025em}
+.hero-copy{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,5vw,72px);align-items:end;margin-bottom:clamp(28px,3.5vw,48px)}
+h1{font-size:clamp(2.6rem,5.6vw,5.4rem);font-weight:800;font-stretch:84%;line-height:.9;letter-spacing:-.025em}
 .hero-copy p{font-size:1.12em}
 .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 
@@ -255,6 +255,17 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
 <main id="main">
 <div id="top" class="hero">
   <div class="wrap">
+    <div class="hero-copy">
+      <h1>Equal education<br> for all.</h1>
+      <div>
+        <p>EEFA Foundation brings free and low-cost tutoring, test prep, research programs, and scholarships to students facing financial or other barriers to academic enrichment.</p>
+        <div class="actions">
+          <a class="btn btn-pencil" href="#programs">See our programs</a>
+          <a class="btn" href="#partners">Partner with us</a>
+        </div>
+      </div>
+    </div>
+
     <div class="sheet" aria-label="An exam answer sheet with bubbles filled in to spell EEFA">
       <div class="sheet-head" aria-hidden="true">
         <div><b>Name</b><i>Every student</i></div>
@@ -269,16 +280,6 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
       </div>
     </div>
 
-    <div class="hero-copy">
-      <h1>Equal education<br> for all.</h1>
-      <div>
-        <p>EEFA Foundation brings free and low-cost tutoring, test prep, research programs, and scholarships to students facing financial or other barriers to academic enrichment.</p>
-        <div class="actions">
-          <a class="btn btn-pencil" href="#programs">See our programs</a>
-          <a class="btn" href="#partners">Partner with us</a>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
