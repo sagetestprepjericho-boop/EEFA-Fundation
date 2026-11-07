@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EEFA Foundation Inc — Equal education for all</title>
+<meta name="description" content="EEFA Foundation brings free and low-cost tutoring, test prep, STEM, research, college access, and scholarships to students facing financial and other barriers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFBFD;      /* answer-sheet white, cool not cream */
+  --form:#1F4FA3;       /* blue dropout ink printed on test forms */
+  --form-tint:#E6EDF8;
+  --form-line:#BFCFEA;
+  --graphite:#34373D;   /* No. 2 pencil */
+  --graphite-soft:#5C6068;
+  --pencil:#F2C230;     /* pencil-barrel yellow, used sparingly */
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --text:"Source Serif 4",Georgia,serif;
+  --max:1240px;
+  --gut:clamp(20px,4vw,48px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--paper);color:var(--graphite);font-family:var(--text);font-size:clamp(17px,1.05vw + 10px,19px);line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--pencil);color:var(--graphite)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+h1,h2,h3,.sans{font-family:var(--display);font-optical-sizing:auto}
+h2{font-size:clamp(2.1rem,4.2vw,3.6rem);font-weight:700;font-stretch:80%;line-height:1;letter-spacing:-.02em;max-width:16ch}
+h3{font-size:1.3rem;font-weight:650;line-height:1.2;letter-spacing:-.01em}
+p{max-width:62ch}
+.muted{color:var(--graphite-soft)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:12px;top:12px;background:var(--graphite);color:#fff;padding:10px 14px;z-index:99}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:650;font-size:1rem;text-decoration:none;padding:15px 26px;border:2px solid var(--graphite);cursor:pointer;background:none;color:var(--graphite);border-radius:999px;transition:background .15s,color .15s}
+.btn:hover{background:var(--graphite);color:var(--paper)}
+.btn-pencil{background:var(--pencil);border-color:var(--pencil)}
+.btn-pencil:hover{background:var(--graphite);border-color:var(--graphite);color:var(--pencil)}
+
+/* Header */
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--form-line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:68px;gap:24px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:750;font-size:1.15rem;letter-spacing:-.01em}
+.mark svg{width:30px;height:30px}
+.mark span{font-weight:450;color:var(--graphite-soft);font-size:.95rem;letter-spacing:0}
+nav ul{display:flex;gap:30px;list-style:none;font-family:var(--display);font-size:.98rem}
+nav a{text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+nav a:hover{border-color:var(--form)}
+.bar .btn{padding:10px 20px;font-size:.92rem}
+.menu{display:none;background:none;border:0;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--graphite);cursor:pointer;padding:8px}
+
+/* Hero */
+.hero{padding:clamp(28px,4vw,56px) 0 clamp(64px,8vw,112px)}
+.sheet{position:relative;border:1.5px solid var(--form);background:#fff;padding:clamp(14px,2.2vw,28px) clamp(14px,2.6vw,36px) clamp(14px,2vw,24px) clamp(14px,2.6vw,36px);padding-right:clamp(30px,4vw,56px)}
+.sheet-head{display:grid;grid-template-columns:2fr 2fr 1fr;gap:clamp(12px,2vw,28px);color:var(--form);font-family:var(--display);font-size:clamp(.72rem,.9vw,.86rem);margin-bottom:clamp(10px,1.4vw,16px)}
+.sheet-head div{border-bottom:1px solid var(--form);padding-bottom:4px;display:flex;gap:8px;white-space:nowrap;overflow:hidden}
+.sheet-head b{font-weight:600}
+.sheet-head i{font-family:var(--text);font-style:italic;color:var(--graphite);font-size:1.15em}
+#grid{display:block;width:100%;height:auto;user-select:none}
+#grid .b{cursor:pointer}
+#grid .b ellipse.o{fill:#fff;stroke:var(--form);stroke-width:1.4}
+#grid .b text{fill:var(--form);font-family:var(--display);font-size:11px;font-weight:600;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+#grid .b .f{fill:var(--graphite);transform-box:fill-box;transform-origin:center;transform:scale(.15);opacity:0;transition:transform .22s cubic-bezier(.3,1.4,.5,1),opacity .12s}
+#grid .b.on .f{transform:scale(1);opacity:1}
+#grid .b:hover ellipse.o{stroke-width:2.2}
+#grid .rn{fill:var(--form);font-family:var(--display);font-size:12px;font-weight:600;text-anchor:end;dominant-baseline:central}
+.timing{position:absolute;right:clamp(8px,1.2vw,16px);top:12%;bottom:12%;display:flex;flex-direction:column;justify-content:space-between}
+.timing i{display:block;width:clamp(8px,1vw,14px);height:5px;background:var(--graphite)}
+.sheet-foot{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(10px,1.5vw,18px);font-family:var(--display);font-size:clamp(.72rem,.9vw,.85rem);color:var(--form)}
+.sheet-foot button{background:none;border:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+.hero-copy{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,5vw,72px);align-items:end;margin-top:clamp(36px,5vw,64px)}
+h1{font-size:clamp(2.8rem,6.4vw,6rem);font-weight:800;font-stretch:84%;line-height:.9;letter-spacing:-.025em}
+.hero-copy p{font-size:1.12em}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+
+/* Sections */
+section{padding:clamp(72px,9vw,128px) 0;border-top:1px solid var(--form-line)}
+.split{display:grid;grid-template-columns:5fr 7fr;gap:clamp(32px,6vw,96px)}
+.lead{font-size:clamp(1.3rem,1.9vw,1.75rem);line-height:1.4;max-width:30ch}
+
+/* Mission */
+.belief{font-family:var(--text);font-size:clamp(1.6rem,3vw,2.6rem);line-height:1.22;letter-spacing:-.01em;max-width:24ch;margin-top:28px}
+.belief em{font-style:italic}
+.commit{list-style:none;display:grid;gap:0}
+.commit li{display:grid;grid-template-columns:28px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--form-line)}
+.commit li:first-child{padding-top:0}
+.dot{width:22px;height:15px;border-radius:50%;background:var(--graphite);margin-top:6px}
+.commit h3{margin-bottom:4px}
+.commit p{color:var(--graphite-soft);font-size:.96em}
+
+/* Programs catalog */
+.cat-intro{display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,56px)}
+.cat-intro p{max-width:44ch}
+.group{display:grid;grid-template-columns:220px 1fr;gap:clamp(20px,4vw,56px);padding:28px 0;border-top:2px solid var(--graphite)}
+.group > h3{font-size:1.05rem;font-weight:700;padding-top:18px}
+.group > h3 small{display:block;font-family:var(--text);font-weight:400;font-size:.92rem;color:var(--graphite-soft);margin-top:4px;line-height:1.4}
+details{border-bottom:1px solid var(--form-line)}
+summary{list-style:none;display:grid;grid-template-columns:1.3fr 1fr 28px;gap:20px;align-items:baseline;padding:18px 0;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary .n{font-family:var(--display);font-size:clamp(1.25rem,1.8vw,1.6rem);font-weight:650;font-stretch:88%;letter-spacing:-.015em;line-height:1.15}
+summary .w{color:var(--graphite-soft);font-size:.94em}
+summary .t{width:22px;height:15px;border:1.5px solid var(--form);border-radius:50%;align-self:center;justify-self:end;transition:background .15s}
+details[open] summary .t,summary:hover .t{background:var(--graphite);border-color:var(--graphite)}
+.d{display:grid;grid-template-columns:1.3fr 1fr 28px;gap:20px;padding:0 0 24px}
+.d p{font-size:.98em}
+.d dl{font-family:var(--display);font-size:.9rem;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-content:start}
+.d dt{color:var(--form);font-weight:600}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:var(--display);font-size:.8rem;font-weight:600;padding:3px 10px;border:1.5px solid var(--form);color:var(--form);border-radius:999px}
+
+/* Scholarships */
+#scholarships{background:var(--form);color:#EEF3FB;border-top:0}
+#scholarships h2{color:#fff}
+#scholarships .lead{color:#D3DFF3}
+.slips{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,36px);margin-top:clamp(40px,5vw,64px)}
+.slip{background:var(--paper);color:var(--graphite);padding:clamp(26px,3vw,40px);position:relative}
+.slip::before{content:"";position:absolute;left:0;right:0;top:-1px;height:10px;background:radial-gradient(circle at 10px -2px,var(--form) 7px,transparent 7.5px) 0 0/20px 10px repeat-x}
+.slip h3{font-size:clamp(1.5rem,2.2vw,1.9rem);font-weight:750;font-stretch:82%;line-height:1.05;margin-bottom:12px}
+.slip > p{color:var(--graphite-soft)}
+.fields{margin-top:26px;display:grid;gap:0;font-family:var(--display);font-size:.95rem}
+.fields div{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:11px 0;border-bottom:1px dashed var(--form-line)}
+.fields span{color:var(--form);font-weight:600}
+.stamp{display:inline-block;margin-top:22px;font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--form);border:2px solid var(--form);padding:5px 12px;transform:rotate(-2deg)}
+.sch-foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-top:40px}
+.sch-foot p{color:#D3DFF3;max-width:52ch}
+#scholarships .btn{border-color:#fff;color:#fff}
+#scholarships .btn:hover{background:#fff;color:var(--form)}
+
+/* Partnerships */
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:0 clamp(24px,4vw,56px);margin-top:8px}
+.who div{padding:22px 0;border-bottom:1px solid var(--form-line)}
+.who h3{margin-bottom:6px}
+.who p{color:var(--graphite-soft);font-size:.96em}
+.offer{margin-top:36px;padding:26px 28px;background:var(--form-tint)}
+.offer h3{font-size:1.05rem;margin-bottom:10px}
+.offer ul{list-style:none;display:grid;gap:8px}
+.offer li{padding-left:24px;position:relative}
+.offer li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:8px;border-radius:50%;background:var(--form)}
+
+/* Aspirations */
+.measures{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(36px,5vw,56px);border-top:2px solid var(--graphite)}
+.measures div{padding:22px 22px 0 0}
+.measures div + div{padding-left:22px;border-left:1px solid var(--form-line)}
+.measures h3{font-size:1.15rem;margin-bottom:6px}
+.measures p{font-size:.94em;color:var(--graphite-soft)}
+
+/* Get involved */
+.chooser{margin-top:8px}
+.sentence{font-family:var(--display);font-size:clamp(1.6rem,3.2vw,2.8rem);font-weight:650;font-stretch:85%;line-height:1.1;letter-spacing:-.02em}
+.opts{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
+.opt{font-family:var(--display);font-size:1rem;font-weight:600;background:none;border:2px solid var(--graphite);color:var(--graphite);padding:10px 20px;border-radius:999px;cursor:pointer}
+.opt[aria-pressed="true"]{background:var(--graphite);color:var(--paper)}
+.answer{min-height:7.5em}
+.answer h3{font-size:1.5rem;margin-bottom:8px}
+.answer p{color:var(--graphite-soft)}
+.answer a{display:inline-block;margin-top:14px;font-family:var(--display);font-weight:650;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--pencil)}
+
+/* Contact */
+#contact{background:var(--form-tint);border-top:0}
+form{display:grid;gap:26px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+label,legend{display:grid;gap:4px;font-family:var(--display);font-size:.9rem;font-weight:600;color:var(--form)}
+input[type=text],input[type=email],textarea{font:inherit;font-family:var(--text);font-size:1.05rem;color:var(--graphite);background:transparent;border:0;border-bottom:1.5px solid var(--form);padding:8px 0;border-radius:0;width:100%}
+textarea{min-height:120px;resize:vertical;border:1.5px solid var(--form);padding:12px;background:#fff}
+input:focus,textarea:focus{outline:none;border-color:var(--graphite);box-shadow:0 2px 0 var(--pencil)}
+fieldset{border:0}
+legend{margin-bottom:12px}
+.bubbles{display:grid;gap:10px}
+.bubbles label{display:flex;align-items:center;gap:14px;font-family:var(--text);font-weight:400;font-size:1rem;color:var(--graphite);cursor:pointer}
+.bubbles input{position:absolute;opacity:0;width:1px;height:1px}
+.bb{width:30px;height:21px;border-radius:50%;border:1.5px solid var(--form);display:grid;place-items:center;font-family:var(--display);font-size:.72rem;font-weight:700;color:var(--form);background:#fff;flex:none;transition:background .15s,color .15s}
+.bubbles input:checked + .bb{background:var(--graphite);border-color:var(--graphite);color:var(--graphite)}
+.bubbles input:focus-visible + .bb{outline:3px solid var(--pencil);outline-offset:2px}
+.form-foot{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.form-foot p{font-size:.88rem;color:var(--graphite-soft)}
+.preview{display:none;background:#fff;border-left:4px solid var(--pencil);padding:18px 20px;font-size:.95rem;white-space:pre-wrap}
+.preview.show{display:block}
+.contact-meta{margin-top:32px;font-family:var(--display);font-size:.95rem;display:grid;gap:10px}
+.contact-meta div{display:grid;grid-template-columns:110px 1fr}
+.contact-meta span{color:var(--form);font-weight:600}
+
+/* Footer */
+footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:var(--display);font-size:.95rem}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+.foot .mark{color:#fff}
+.foot .mark span{color:#A2A6AE}
+.foot p{font-family:var(--text);margin-top:14px;max-width:38ch}
+.foot ul{list-style:none;display:grid;gap:8px}
+.foot h4{color:#fff;font-weight:650;margin-bottom:12px}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--pencil)}
+.legal{margin-top:48px;padding-top:22px;border-top:1px solid #4A4E56;font-size:.82rem;color:#9A9EA6;display:grid;gap:6px}
+
+@media (max-width:980px){
+  nav ul{display:none}
+  nav ul.open{display:grid;position:absolute;top:68px;left:0;right:0;background:var(--paper);padding:20px var(--gut) 26px;gap:14px;border-bottom:1px solid var(--form-line);font-size:1.15rem}
+  .menu{display:block}
+  .bar > .btn{display:none}
+  .hero-copy,.split{grid-template-columns:1fr}
+  .group{grid-template-columns:1fr;gap:0}
+  .group > h3{padding-top:0}
+  .measures{grid-template-columns:1fr 1fr}
+  .measures div:nth-child(3){padding-left:0;border-left:0}
+  .measures div:nth-child(n+3){padding-top:28px}
+  .foot{grid-template-columns:1fr 1fr}
+  .foot > div:first-child{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .sheet-head{grid-template-columns:1fr 1fr}
+  .sheet-head div:last-child{display:none}
+  summary,.d{grid-template-columns:1fr 24px}
+  summary .w{display:none}
+  .d dl{grid-column:1}
+  .slips,.who,.two{grid-template-columns:1fr}
+  .measures{grid-template-columns:1fr}
+  .measures div,.measures div + div{padding:20px 0;border-left:0;border-bottom:1px solid var(--form-line)}
+  .sheet-foot span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #grid .b .f{transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap bar">
+    <a class="mark" href="#top" aria-label="EEFA Foundation Inc, home">
+      <svg viewBox="0 0 30 30" aria-hidden="true"><ellipse cx="15" cy="15" rx="13.5" ry="9.5" fill="none" stroke="#1F4FA3" stroke-width="1.6"/><ellipse cx="15" cy="15" rx="9.5" ry="6" fill="#34373D"/></svg>
+      EEFA <span>Foundation Inc</span>
+    </a>
+    <nav aria-label="Main">
+      <button class="menu" id="menu" aria-expanded="false" aria-controls="links">Menu</button>
+      <ul id="links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#scholarships">Scholarships</a></li>
+        <li><a href="#partners">Partnerships</a></li>
+        <li><a href="#involved">Get involved</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-pencil" href="#contact">Contact us</a>
+  </div>
+</header>
+
+<main id="main">
+<div id="top" class="hero">
+  <div class="wrap">
+    <div class="sheet" aria-label="An exam answer sheet with bubbles filled in to spell EEFA">
+      <div class="sheet-head" aria-hidden="true">
+        <div><b>Name</b><i>Every student</i></div>
+        <div><b>School</b><i>Any school</i></div>
+        <div><b>Cost</b><i>Free</i></div>
+      </div>
+      <svg id="grid" role="img" aria-label="Bubbles filled in to spell EEFA"></svg>
+      <div class="timing" aria-hidden="true"></div>
+      <div class="sheet-foot">
+        <span aria-hidden="true">Use a No. 2 pencil. Fill each bubble completely.</span>
+        <button type="button" id="redo">Fill it in again</button>
+      </div>
+    </div>
+
+    <div class="hero-copy">
+      <h1>Equal education<br> for all.</h1>
+      <div>
+        <p>EEFA Foundation brings free and low-cost tutoring, test prep, research programs, and scholarships to students facing financial or other barriers to academic enrichment.</p>
+        <div class="actions">
+          <a class="btn btn-pencil" href="#programs">See our programs</a>
+          <a class="btn" href="#partners">Partner with us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap split">
+    <div>
+      <h2>Talent is everywhere. Access isn't.</h2>
+      <p class="belief">A test-prep course, a summer research lab, a math team that travels: these shape where students go next, and <em>too many of them come with a price tag.</em></p>
+    </div>
+    <div>
+      <p class="lead">We exist to change who gets to take part.</p>
+      <ul class="commit" style="margin-top:32px">
+        <li><span class="dot" aria-hidden="true"></span><div><h3>Remove the cost</h3><p>Programs are free or low-cost, and need-based scholarships cover what remains.</p></div></li>
+        <li><span class="dot" aria-hidden="true"></span><div><h3>Raise the ceiling</h3><p>Beyond catching up: research, competitions, and serious writing for students ready to go further.</p></div></li>
+        <li><span class="dot" aria-hidden="true"></span><div><h3>Clear the path to college</h3><p>Applications, essays, financial aid, and the exams that open selective schools.</p></div></li>
+        <li><span class="dot" aria-hidden="true"></span><div><h3>Fit around real lives</h3><p>After-school and summer schedules built for students who work, commute, or care for family.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="programs">
+  <div class="wrap">
+    <div class="cat-intro">
+      <h2>The program catalog</h2>
+      <p class="muted">Programs are launching in phases. Select any program to see who it's for and what it covers. Dates will be posted here first.</p>
+    </div>
+
+    <div class="group">
+      <h3>Academic support<small>Help with the work in front of you.</small></h3>
+      <div>
+        <details>
+          <summary><span class="n">Tutoring</span><span class="w">Grades K–12, all subjects</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>One-on-one and small-group sessions with trained tutors, matched to each student's coursework and pace. Free or low-cost for every family.</p><dl><dt>Format</dt><dd>In person and online</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">Test preparation</span><span class="w"><span class="pills"><span class="pill">SAT</span><span class="pill">SHSAT</span><span class="pill">Regents</span></span></span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Structured prep courses with diagnostic tests, timed practice exams, and strategy sessions for the tests that decide high school and college admissions.</p><dl><dt>Format</dt><dd>Cohort courses</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Discovery<small>For students ready to go further.</small></h3>
+      <div>
+        <details>
+          <summary><span class="n">STEM programs</span><span class="w">Middle and high school</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Hands-on science, engineering, and coding projects that go past the textbook, led by people who work in the field.</p><dl><dt>Format</dt><dd>Workshops and labs</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">Research programs</span><span class="w">High school</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Mentored research projects where students ask a real question, gather evidence, and present their findings.</p><dl><dt>Format</dt><dd>Mentorship</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">Math competitions</span><span class="w">Grades 5–12</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Team training, practice rounds, and covered registration for math competitions, so cost never keeps a strong problem-solver off the roster.</p><dl><dt>Format</dt><dd>Teams</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">Writing programs</span><span class="w">Middle and high school</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Workshops in academic, creative, and personal writing, with close feedback on every draft.</p><dl><dt>Format</dt><dd>Workshops</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Pathways<small>Getting to what's next.</small></h3>
+      <div>
+        <details>
+          <summary><span class="n">College access</span><span class="w">Grades 10–12 and families</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Guidance on choosing schools, writing applications and essays, and completing FAFSA and other financial aid forms.</p><dl><dt>Format</dt><dd>Advising and workshops</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">Summer programs</span><span class="w">All grades</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>Summer study that prevents learning loss and gives students weeks to go deep on a subject they love.</p><dl><dt>Format</dt><dd>Summer sessions</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+        <details>
+          <summary><span class="n">After-school programs</span><span class="w">All grades</span><span class="t" aria-hidden="true"></span></summary>
+          <div class="d"><p>A steady place after the bell for homework help, study time, and enrichment activities.</p><dl><dt>Format</dt><dd>Weekly</dd><dt>Status</dt><dd>Planned</dd></dl></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scholarships">
+  <div class="wrap">
+    <div class="split">
+      <h2>Scholarships</h2>
+      <p class="lead">Two kinds of awards: one for students who can't afford the opportunity, and one for students who've earned a seat at it.</p>
+    </div>
+    <div class="slips">
+      <article class="slip">
+        <h3>Need-Based Educational Scholarship</h3>
+        <p>For students whose family finances stand between them and an educational opportunity.</p>
+        <div class="fields">
+          <div><span>Covers</span>Tuition, program fees, test registration</div>
+          <div><span>Also</span>Books, supplies, technology</div>
+          <div><span>Based on</span>Financial need</div>
+        </div>
+        <div class="stamp">Not open yet</div>
+      </article>
+      <article class="slip">
+        <h3>Academic Opportunity Scholarship</h3>
+        <p>For motivated students accepted into enrichment, research, competitions, or summer programs.</p>
+        <div class="fields">
+          <div><span>Covers</span>Program costs, competition fees</div>
+          <div><span>Also</span>Travel and materials</div>
+          <div><span>Based on</span>Opportunity and commitment</div>
+        </div>
+        <div class="stamp">Not open yet</div>
+      </article>
+    </div>
+    <div class="sch-foot">
+      <p>Application dates, eligibility criteria, and award amounts haven't been announced. Leave your email and we'll tell you when applications open.</p>
+      <a class="btn" href="#contact" data-interest="Scholarships">Get notified</a>
+    </div>
+  </div>
+</section>
+
+<section id="partners">
+  <div class="wrap split">
+    <div>
+      <h2>Partnerships</h2>
+      <p class="lead" style="margin-top:24px">We work alongside schools and community groups, not around them.</p>
+      <div class="offer">
+        <h3>What a partner school can expect</h3>
+        <ul>
+          <li>Tutoring and test prep on site or nearby</li>
+          <li>Shared STEM, research, and competition programs</li>
+          <li>College-access workshops for students and families</li>
+          <li>Scholarship outreach to the students who need it</li>
+        </ul>
+      </div>
+    </div>
+    <div class="who">
+      <div><h3>Schools</h3><p>Extend what your students can reach without adding to your budget.</p></div>
+      <div><h3>Educators</h3><p>Tutor, mentor, or lead a program in your subject.</p></div>
+      <div><h3>Community groups</h3><p>Host sessions, share space, or design programs for your neighborhood.</p></div>
+      <div><h3>Supporters</h3><p>Fund scholarships and keep programs free for families.</p></div>
+      <div style="border:0;padding-top:30px"><a class="btn" href="#contact" data-interest="School partnership">Start a partnership</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="aspirations">
+  <div class="wrap">
+    <div class="split">
+      <h2>How we'll know it's working</h2>
+      <p class="lead">Success means more students take part, learn, and move forward. As programs launch, we'll report on four things.</p>
+    </div>
+    <div class="measures">
+      <div><h3>Who takes part</h3><p>How many students join, and from which schools and neighborhoods.</p></div>
+      <div><h3>How they grow</h3><p>Progress in grades, test scores, and skills over time.</p></div>
+      <div><h3>Where they get in</h3><p>Admission to specialized high schools, research programs, and competitions.</p></div>
+      <div><h3>What comes next</h3><p>College applications, acceptances, and financial aid secured.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="involved">
+  <div class="wrap split">
+    <h2>Get involved</h2>
+    <div class="chooser">
+      <p class="sentence" id="q">I'd like to help by…</p>
+      <div class="opts" role="group" aria-labelledby="q">
+        <button class="opt" aria-pressed="true" data-k="v">volunteering</button>
+        <button class="opt" aria-pressed="false" data-k="p">partnering</button>
+        <button class="opt" aria-pressed="false" data-k="s">giving</button>
+      </div>
+      <div class="answer" id="answer" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap split">
+    <div>
+      <h2>Write to us</h2>
+      <p class="lead" style="margin-top:24px">Questions about programs, scholarships, or partnerships all come to the same place.</p>
+      <div class="contact-meta">
+        <div><span>Organization</span>EEFA Foundation Inc</div>
+        <div><span>Email</span>hello@example.org</div>
+        <div><span>Programs</span>Launching in phases</div>
+      </div>
+    </div>
+    <form id="form" novalidate>
+      <div class="two">
+        <label>Your name<input type="text" name="name" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      </div>
+      <fieldset>
+        <legend>What's this about?</legend>
+        <div class="bubbles" id="interest">
+          <label><input type="radio" name="interest" value="Programs and tutoring" checked><span class="bb">A</span>Programs and tutoring</label>
+          <label><input type="radio" name="interest" value="Scholarships"><span class="bb">B</span>Scholarships</label>
+          <label><input type="radio" name="interest" value="School partnership"><span class="bb">C</span>A school or community partnership</label>
+          <label><input type="radio" name="interest" value="Volunteering"><span class="bb">D</span>Volunteering</label>
+          <label><input type="radio" name="interest" value="Giving"><span class="bb">E</span>Giving</label>
+        </div>
+      </fieldset>
+      <label>Message<textarea name="message" required></textarea></label>
+      <div class="form-foot">
+        <button class="btn btn-pencil" type="submit">Preview message</button>
+        <p>This form is a preview and doesn't send yet.</p>
+      </div>
+      <div class="preview" id="preview" role="status"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="mark" href="#top">
+          <svg viewBox="0 0 30 30" aria-hidden="true"><ellipse cx="15" cy="15" rx="13.5" ry="9.5" fill="none" stroke="#F2C230" stroke-width="1.6"/><ellipse cx="15" cy="15" rx="9.5" ry="6" fill="#F2C230"/></svg>
+          EEFA <span>Foundation Inc</span>
+        </a>
+        <p>Expanding access to educational opportunity for students facing financial or other barriers.</p>
+      </div>
+      <div><h4>Explore</h4><ul><li><a href="#about">About</a></li><li><a href="#programs">Programs</a></li><li><a href="#scholarships">Scholarships</a></li></ul></div>
+      <div><h4>Connect</h4><ul><li><a href="#partners">Partnerships</a></li><li><a href="#involved">Get involved</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    </div>
+    <div class="legal">
+      <p>© <span id="yr"></span> EEFA Foundation Inc.</p>
+      <p>Programs, scholarships, and partnerships on this site are planned and not yet active. Nothing here represents IRS tax-exempt status.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---- Answer-sheet hero ---- */
+  const L = {
+    E:["11111","10000","10000","11110","10000","10000","11111"],
+    F:["11111","10000","10000","11110","10000","10000","10000"],
+    A:["01110","10001","10001","11111","10001","10001","10001"]
+  };
+  const word = "EEFA", rows = 7, cw = 40, gap = 26, rh = 38, left = 34, top = 8;
+  const cols = [];
+  [...word].forEach((ch,i) => { for (let c=0;c<5;c++) cols.push({ch, c}); if (i<word.length-1) cols.push(null); });
+  const xs = []; let acc = left; cols.forEach(c => { xs.push(acc); acc += c ? cw : gap; });
+  const W = acc, H = top*2 + rows*rh - 6;
+  const svg = document.getElementById('grid');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (t,a) => { const e = document.createElementNS(NS,t); for (const k in a) e.setAttribute(k,a[k]); return e; };
+
+  const defs = mk('defs',{});
+  const flt = mk('filter',{id:'pencil',x:'-20%',y:'-20%',width:'140%',height:'140%'});
+  flt.append(mk('feTurbulence',{type:'fractalNoise',baseFrequency:'1.4',numOctaves:'2',seed:'4',result:'n'}));
+  flt.append(mk('feDisplacementMap',{in:'SourceGraphic',in2:'n',scale:'1.5'}));
+  defs.append(flt); svg.append(defs);
+
+  const targets = [];
+  for (let r=0;r<rows;r++){
+    const y = top + r*rh + rh/2 - 5;
+    const t = mk('text',{class:'rn',x:left-12,y}); t.textContent = r+1; svg.append(t);
+    cols.forEach((col,ci) => {
+      if (!col) return;
+      const x = xs[ci] + cw/2;
+      const g = mk('g',{class:'b',tabindex:'-1'});
+      g.append(mk('ellipse',{class:'o',cx:x,cy:y,rx:14,ry:10}));
+      const tx = mk('text',{x,y}); tx.textContent = 'ABCDE'[col.c]; g.append(tx);
+      g.append(mk('ellipse',{class:'f',cx:x,cy:y,rx:13,ry:9.2,filter:'url(#pencil)'}));
+      g.addEventListener('click',()=>g.classList.toggle('on'));
+      svg.append(g);
+      if (col && L[col.ch][r][col.c]==='1') targets.push({g,ci,r});
+    });
+  }
+  /* order like a student working down each column */
+  targets.sort((a,b)=>a.ci-b.ci||a.r-b.r);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fill = () => {
+    svg.querySelectorAll('.b.on').forEach(b=>b.classList.remove('on'));
+    targets.forEach((t,i) => reduce ? t.g.classList.add('on') : setTimeout(()=>t.g.classList.add('on'), 250 + i*26));
+  };
+  fill();
+  document.getElementById('redo').addEventListener('click', fill);
+
+  const tm = document.querySelector('.timing');
+  for (let i=0;i<rows;i++) tm.append(document.createElement('i'));
+
+  /* ---- Mobile menu ---- */
+  const menu = document.getElementById('menu'), links = document.getElementById('links');
+  menu.addEventListener('click',()=>{ const o = links.classList.toggle('open'); menu.setAttribute('aria-expanded',o); menu.textContent = o ? 'Close' : 'Menu'; });
+  links.addEventListener('click',e=>{ if(e.target.tagName==='A'){ links.classList.remove('open'); menu.setAttribute('aria-expanded',false); menu.textContent='Menu'; }});
+
+  /* ---- Get involved chooser ---- */
+  const A = {
+    v:{h:'Tutor, mentor, or coach',p:'Help a student with algebra, review a college essay, coach a math team, or mentor a research project. Tell us what you know and when you are free.',l:'Volunteer with EEFA',i:'Volunteering'},
+    p:{h:'Bring programs to your students',p:'Schools, libraries, and community groups can host tutoring, test prep, and workshops, or work with us to design something new.',l:'Start a partnership',i:'School partnership'},
+    s:{h:'Fund a seat',p:'Gifts pay for scholarships and keep programs free for families. Giving opens once our nonprofit status is confirmed; leave your email to hear first.',l:'Hear when giving opens',i:'Giving'}
+  };
+  const ans = document.getElementById('answer');
+  const show = k => { const a = A[k]; ans.innerHTML = `<h3>${a.h}</h3><p>${a.p}</p><a href="#contact" data-interest="${a.i}">${a.l}</a>`; };
+  document.querySelectorAll('.opt').forEach(b => b.addEventListener('click',()=>{
+    document.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    show(b.dataset.k);
+  }));
+  show('v');
+
+  /* Any link carrying data-interest preselects the form */
+  document.addEventListener('click',e=>{
+    const a = e.target.closest('[data-interest]'); if(!a) return;
+    const r = document.querySelector(`#interest input[value="${a.dataset.interest}"]`); if (r) r.checked = true;
+  });
+
+  /* ---- Contact preview ---- */
+  document.getElementById('form').addEventListener('submit',e=>{
+    e.preventDefault();
+    const f = e.target, out = document.getElementById('preview');
+    if (!f.checkValidity()){ f.reportValidity(); return; }
+    const d = new FormData(f);
+    out.textContent = `To: EEFA Foundation Inc\nFrom: ${d.get('name')} <${d.get('email')}>\nAbout: ${d.get('interest')}\n\n${d.get('message')}`;
+    out.classList.add('show');
+  });
+})();
+</script>
+</body>
+</html>
