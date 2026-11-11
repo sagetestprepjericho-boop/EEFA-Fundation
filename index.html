@@ -461,7 +461,7 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
       <p class="lead" style="margin-top:24px">Questions about programs, scholarships, or partnerships all come to the same place.</p>
       <div class="contact-meta">
         <div><span>Organization</span>EEFA Foundation Inc</div>
-        <div><span>Email</span>hello@example.org</div>
+        <div><span>Email</span><a href="mailto:info@eefafoundation.org">info@eefafoundation.org</a></div>
         <div><span>Programs</span>Launching in phases</div>
       </div>
     </div>
@@ -482,8 +482,8 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
       </fieldset>
       <label>Message<textarea name="message" required></textarea></label>
       <div class="form-foot">
-        <button class="btn btn-pencil" type="submit">Preview message</button>
-        <p>This form is a preview and doesn't send yet.</p>
+        <button class="btn btn-pencil" type="submit">Send message</button>
+        <p>This opens your email app with the message ready to send to info@eefafoundation.org.</p>
       </div>
       <div class="preview" id="preview" role="status"></div>
     </form>
@@ -502,7 +502,7 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
         <p>Expanding access to educational opportunity for students facing financial or other barriers.</p>
       </div>
       <div><h4>Explore</h4><ul><li><a href="#about">About</a></li><li><a href="#programs">Programs</a></li><li><a href="#scholarships">Scholarships</a></li></ul></div>
-      <div><h4>Connect</h4><ul><li><a href="#partners">Partnerships</a></li><li><a href="#involved">Get involved</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div><h4>Connect</h4><ul><li><a href="#partners">Partnerships</a></li><li><a href="#involved">Get involved</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:info@eefafoundation.org">info@eefafoundation.org</a></li></ul></div>
     </div>
     <div class="legal">
       <p>© <span id="yr"></span> EEFA Foundation Inc.</p>
@@ -597,7 +597,10 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
     const f = e.target, out = document.getElementById('preview');
     if (!f.checkValidity()){ f.reportValidity(); return; }
     const d = new FormData(f);
-    out.textContent = `To: EEFA Foundation Inc\nFrom: ${d.get('name')} <${d.get('email')}>\nAbout: ${d.get('interest')}\n\n${d.get('message')}`;
+    const subject = `${d.get('interest')}: message from ${d.get('name')}`;
+    const body = `${d.get('message')}\n\n${d.get('name')}\n${d.get('email')}`;
+    location.href = `mailto:info@eefafoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    out.innerHTML = `If your email app didn't open, write to us directly at <a href="mailto:info@eefafoundation.org">info@eefafoundation.org</a>.`;
     out.classList.add('show');
   });
 })();
