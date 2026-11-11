@@ -39,6 +39,7 @@ p{max-width:62ch}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:650;font-size:1rem;text-decoration:none;padding:15px 26px;border:2px solid var(--graphite);cursor:pointer;background:none;color:var(--graphite);border-radius:999px;transition:background .15s,color .15s}
+.btn:disabled{opacity:.6;cursor:wait}
 .btn:hover{background:var(--graphite);color:var(--paper)}
 .btn-pencil{background:var(--form);border-color:var(--form);color:#fff}
 .btn-pencil:hover{background:#163C80;border-color:#163C80;color:#fff}
@@ -482,10 +483,11 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
       </fieldset>
       <label>Message<textarea name="message" required></textarea></label>
       <div class="form-foot">
-        <button class="btn btn-pencil" type="submit">Send message</button>
-        <p>This opens your email app with the message ready to send to info@eefafoundation.org.</p>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+        <button class="btn btn-pencil" type="submit" id="send">Send message</button>
+        <p>Your message goes straight to info@eefafoundation.org. We reply by email.</p>
       </div>
-      <div class="preview" id="preview" role="status"></div>
+      <div class="preview" id="preview" role="status" aria-live="polite"></div>
     </form>
   </div>
 </section>
@@ -592,15 +594,36 @@ footer{background:var(--graphite);color:#C9CCD2;padding:64px 0 36px;font-family:
   });
 
   /* ---- Contact preview ---- */
-  document.getElementById('form').addEventListener('submit',e=>{
+  const form = document.getElementById('form'), out = document.getElementById('preview'), send = document.getElementById('send');
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const f = e.target, out = document.getElementById('preview');
-    if (!f.checkValidity()){ f.reportValidity(); return; }
-    const d = new FormData(f);
-    const subject = `${d.get('interest')}: message from ${d.get('name')}`;
-    const body = `${d.get('message')}\n\n${d.get('name')}\n${d.get('email')}`;
-    location.href = `mailto:info@eefafoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    out.innerHTML = `If your email app didn't open, write to us directly at <a href="mailto:info@eefafoundation.org">info@eefafoundation.org</a>.`;
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const d = new FormData(form);
+    if (d.get('botcheck')) return;
+    send.disabled = true; send.textContent = 'Sending…';
+    out.classList.remove('show');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: '4d21943b-f77f-4be5-b294-eb8c13f01280',
+          subject: `Website: ${d.get('interest')} from ${d.get('name')}`,
+          from_name: 'EEFA Foundation website',
+          name: d.get('name'), email: d.get('email'), replyto: d.get('email'),
+          interest: d.get('interest'), message: d.get('message')
+        })
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Send failed');
+      form.reset();
+      out.textContent = `Message sent. Thanks, ${d.get('name')}. We'll reply to ${d.get('email')}.`;
+      send.textContent = 'Sent';
+      setTimeout(() => { send.textContent = 'Send message'; send.disabled = false; }, 4000);
+    } catch (err) {
+      out.innerHTML = `Your message didn't send. Check your connection and try again, or write to us at <a href="mailto:info@eefafoundation.org">info@eefafoundation.org</a>.`;
+      send.textContent = 'Send message'; send.disabled = false;
+    }
     out.classList.add('show');
   });
 })();
